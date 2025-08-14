@@ -4,26 +4,26 @@ from datetime import datetime
 
 class AnalogClock(tk.Canvas):
     def __init__(self, master=None, **kwargs):
-        super().__init__(master, width=400, height=400, bg='black', highlightthickness=0)
+        super().__init__(master, width=400, height=400, bg='#f0f0f0', highlightthickness=0)
         self.center = (200, 200)
         self.radius = 190
         self.draw_face()
-        # Create clock hands with subtle shadows for 3D effect
+        # Create clock hands with high-contrast colors for readability
         self.hands = {
-            'hour': self.create_line(0, 0, 0, 0, width=8, fill='#CCCCCC', capstyle=tk.ROUND),
-            'minute': self.create_line(0, 0, 0, 0, width=5, fill='#EEEEEE', capstyle=tk.ROUND),
-            'second': self.create_line(0, 0, 0, 0, width=2, fill='#FF3333', capstyle=tk.ROUND)
+            'hour': self.create_line(0, 0, 0, 0, width=8, fill='#000000', capstyle=tk.ROUND),
+            'minute': self.create_line(0, 0, 0, 0, width=5, fill='#000000', capstyle=tk.ROUND),
+            'second': self.create_line(0, 0, 0, 0, width=2, fill='#d40000', capstyle=tk.ROUND)
         }
         self.update_clock()
 
     def draw_face(self):
         cx, cy = self.center
-        # Metallic radial gradient
+        # Metallic radial gradient with lighter tones for better contrast
         for r in range(self.radius, 0, -1):
-            shade = 180 + int(60 * (r / self.radius))
+            shade = 200 + int(55 * (r / self.radius))
             color = f'#{shade:02x}{shade:02x}{shade:02x}'
             self.create_oval(cx - r, cy - r, cx + r, cy + r, outline=color)
-        # Tick marks
+        # Tick marks with strong contrast
         for i in range(60):
             angle = math.pi / 30 * i
             inner = self.radius - 15 if i % 5 == 0 else self.radius - 10
@@ -33,9 +33,10 @@ class AnalogClock(tk.Canvas):
             x1 = cx + outer * math.sin(angle)
             y1 = cy - outer * math.cos(angle)
             width = 4 if i % 5 == 0 else 1
-            self.create_line(x0, y0, x1, y1, fill='#888888', width=width)
+            color = '#000000' if i % 5 == 0 else '#666666'
+            self.create_line(x0, y0, x1, y1, fill=color, width=width)
         # Center cap
-        self.create_oval(cx - 8, cy - 8, cx + 8, cy + 8, fill='#777777', outline='')
+        self.create_oval(cx - 8, cy - 8, cx + 8, cy + 8, fill='#000000', outline='')
 
     def update_clock(self):
         now = datetime.now()
